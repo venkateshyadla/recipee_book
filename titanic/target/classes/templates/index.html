@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe Book</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+  }
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+  }
+  .recipe-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .recipe-card:hover {
+    transform: scale(1.05);
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <h1>Recipe Book</h1>
+  <div class="recipe-grid" id="recipeGrid">
+    <!-- Recipe cards will be dynamically added here -->
+  </div>
+</div>
+
+<script>
+  // Define recipe data
+  const recipes = [
+    {
+      name: "Pasta Carbonara",
+      ingredients: ["Spaghetti", "Bacon", "Eggs", "Parmesan Cheese", "Black Pepper"],
+      description: "A classic Italian pasta dish made with eggs, cheese, bacon, and black pepper.",
+      rating: 4.5
+    },
+    {
+      name: "Pasta Carbonara",
+      ingredients: ["Spaghetti", "Bacon", "Eggs", "Parmesan Cheese", "Black Pepper"],
+      description: "A classic Italian pasta dish made with eggs, cheese, bacon, and black pepper.",
+      rating: 4.5
+    },
+    {
+      name: "Pasta Carbonara",
+      ingredients: ["Spaghetti", "Bacon", "Eggs", "Parmesan Cheese", "Black Pepper"],
+      description: "A classic Italian pasta dish made with eggs, cheese, bacon, and black pepper.",
+      rating: 4.5
+    },
+    {
+      name: "Pasta Carbonara",
+      ingredients: ["Spaghetti", "Bacon", "Eggs", "Parmesan Cheese", "Black Pepper"],
+      description: "A classic Italian pasta dish made with eggs, cheese, bacon, and black pepper.",
+      rating: 4.5
+    },
+    {
+      name: "Chicken Stir-Fry",
+      ingredients: ["Chicken Breast", "Bell Peppers", "Broccoli", "Soy Sauce", "Garlic", "Ginger"],
+      description: "A flavorful stir-fry made with tender chicken and crunchy vegetables, seasoned with soy sauce, garlic, and ginger.",
+      rating: 4.2
+    },
+    // Add more recipes as needed
+  ];
+
+  // Function to create recipe cards
+  function createRecipeCard(recipe) {
+    const card = document.createElement('div');
+    card.classList.add('recipe-card');
+    card.innerHTML = `
+      <h3>${recipe.name}</h3>
+      <p><strong>Ingredients:</strong> ${recipe.ingredients.join(", ")}</p>
+      <p><strong>Description:</strong> ${recipe.description}</p>
+      <p><strong>Rating:</strong> ${recipe.rating}</p>
+    `;
+    card.addEventListener('click', () => {
+      // When the card is clicked, show the recipe details
+      alert(`${recipe.name}\n\nIngredients: ${recipe.ingredients.join(", ")}\n\nDescription: ${recipe.description}\n\nRating: ${recipe.rating}`);
+    });
+    return card;
+  }
+
+  // Function to initialize the recipe grid
+  function initializeRecipeGrid() {
+    const recipeGrid = document.getElementById('recipeGrid');
+    recipes.forEach(recipe => {
+      const card = createRecipeCard(recipe);
+      recipeGrid.appendChild(card);
+    });
+  }
+
+  // Initialize the recipe grid when the page loads
+  window.addEventListener('load', initializeRecipeGrid);
+</script>
+</body>
+</html>

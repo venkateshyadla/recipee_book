@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recipe Book</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  .search-bar {
+            width: 70%; /* Adjust as needed */
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .search-bar:focus {
+            outline: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+  .container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 0 20px;
+  }
+  .recipe-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-gap: 20px;
+  }
+  .search-container button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 16px;
+        }
+  .recipe-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s;
+  }
+  .btn-add-recipe {
+            display: inline-block;
+
+            padding: 10px 20px;
+            background-color: #0bdf55;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        h1 {
+            text-shadow: 2px 2px 4px rgb(255, 255, 255); /* Text shadow for heading */
+            color: #333;
+            text-align: center;
+            font-family: initial;
+            margin-top: 50px;
+        }
+        .btn-add-recipe:hover {
+            background-color: #68a297;
+        }
+        body {
+    background-image: url('images/snacks.jpg');
+    background-size: cover; /* Adjust background size as needed */
+    background-position: center; /* Adjust background position as needed */
+    background: linear-gradient(to right, #fdf9f9, #373232);
+    background-repeat: no-repeat; /* Prevent background images from repeating */
+}
+
+    .recipe-card {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+    background-color: rgba(255, 255, 255, 0.5);
+    transition: transform 0.2s, box-shadow 0.2s; /* Include box-shadow in the transition */
+    box-shadow: 0 4px 8px rgba(244, 241, 241, 0.1); /* Add box shadow */
+}
+
+.recipe-card:hover {
+    transform: scale(1.05);
+    box-shadow: 5px 10px 20px rgba(0, 0, 0, 0.2); /* Change box shadow on hover */
+}
+
+</style>
+</head>
+<body>
+    <h1 class="heading">Welcome To Recipe Book</h1>
+<div class="container">
+    <input type="text" id="searchInput" class="search-bar" placeholder="Search recipe...">
+    <button type="button" class="btn-add-recipe" onclick="searchByName()">Search</button>
+    <button class="btn-add-recipe" onclick="redirectToOptView()">Add Recipe</button>
+</div>
+
+<div class="container">
+  <div class="recipe-grid" id="recipeGrid">
+    <!-- Recipe cards will be dynamically added here -->
+  </div>
+</div>
+
+
+<script>
+  // Define recipe data
+  const staticRecipes = [
+  {
+    name: "Chole Bhature",
+    ingredients: ["Spaghetti", "Ground beef", "Tomato sauce", "Onion", "Garlic", "Oregano"],
+    description: "Classic Italian pasta dish with a rich and savory meat sauce.",
+    rating: 4.7
+  },
+  {
+    name: "Palak Paneer",
+    ingredients: ["Fettuccine", "Chicken breast", "Heavy cream", "Parmesan cheese", "Garlic", "Butter"],
+    description: "Creamy pasta dish made with tender chicken and a rich Alfredo sauce.",
+    rating: 4.6
+  },
+  {
+    name: "Biryani",
+    ingredients: ["Beef sirloin", "Bell peppers", "Broccoli", "Soy sauce", "Ginger", "Garlic"],
+    description: "Quick and flavorful stir-fry with tender beef and crunchy vegetables.",
+    rating: 4.5
+  },
+  {
+    name: "Rogan Josh",
+    ingredients: ["Mixed vegetables", "Coconut milk", "Curry paste", "Onion", "Garlic", "Ginger"],
+    description: "Hearty and aromatic curry dish packed with colorful vegetables.",
+    rating: 4.4
+  },
+  {
+    name: "Pav Bhaji",
+    ingredients: ["Tomatoes", "Fresh mozzarella", "Basil", "Olive oil", "Balsamic vinegar", "Salt"],
+    description: "Simple and refreshing salad featuring ripe tomatoes, creamy mozzarella, and fragrant basil.",
+    rating: 4.8
+  },
+  {
+    name: "Grilled Salmon",
+    ingredients: ["Salmon fillets", "Lemon", "Garlic", "Olive oil", "Salt", "Pepper"],
+    description: "Healthy and delicious grilled salmon with a zesty lemon-garlic marinade.",
+    rating: 4.7
+  },
+  {
+    name: "Mushroom Risotto",
+    ingredients: ["Arborio rice", "Mushrooms", "Chicken broth", "White wine", "Parmesan cheese", "Onion"],
+    description: "Creamy and comforting Italian rice dish infused with earthy mushrooms.",
+    rating: 4.6
+  },
+  {
+    name: "Greek Salad",
+    ingredients: ["Cucumber", "Tomatoes", "Red onion", "Kalamata olives", "Feta cheese", "Olive oil"],
+    description: "Fresh and vibrant salad with crisp cucumbers, juicy tomatoes, and tangy feta cheese.",
+    rating: 4.5
+  },
+  {
+    name: "Tandoori Chicken",
+    ingredients: ["Ground beef", "Taco seasoning", "Tortillas", "Lettuce", "Tomato", "Cheese"],
+    description: "Classic Mexican street food featuring seasoned beef and your favorite toppings.",
+    rating: 4.4
+  },
+  {
+    name: "Aloo Gobi",
+    ingredients: ["Chicken breast", "Romaine lettuce", "Caesar dressing", "Croutons", "Parmesan cheese", "Lemon"],
+    description: "Satisfying salad with tender grilled chicken, crisp lettuce, and a creamy Caesar dressing.",
+    rating: 4.8
+  },
+  // Add more recipes here...
+  {
+    name: "Dal Makhani",
+    ingredients: ["Spaghetti", "Ground beef", "Tomato sauce", "Onion", "Garlic", "Oregano"],
+    description: "Classic Italian pasta dish with a rich and savory meat sauce.",
+    rating: 4.7
+  },
+  {
+    name: "Paneer Tikka",
+    ingredients: ["Fettuccine", "Chicken breast", "Heavy cream", "Parmesan cheese", "Garlic", "Butter"],
+    description: "Creamy pasta dish made with tender chicken and a rich Alfredo sauce.",
+    rating: 4.6
+  },
+  {
+    name: "Samosa",
+    ingredients: ["Beef sirloin", "Bell peppers", "Broccoli", "Soy sauce", "Ginger", "Garlic"],
+    description: "Quick and flavorful stir-fry with tender beef and crunchy vegetables.",
+    rating: 4.5
+  },
+  {
+    name: "Chicken Tikka Masala",
+    ingredients: ["Mixed vegetables", "Coconut milk", "Curry paste", "Onion", "Garlic", "Ginger"],
+    description: "Hearty and aromatic curry dish packed with colorful vegetables.",
+    rating: 4.4
+  },
+  {
+    name: "Pani Puri",
+    ingredients: ["Tomatoes", "Fresh mozzarella", "Basil", "Olive oil", "Balsamic vinegar", "Salt"],
+    description: "Simple and refreshing salad featuring ripe tomatoes, creamy mozzarella, and fragrant basil.",
+    rating: 4.8
+  },
+  {
+    name: "Vada Pav",
+    ingredients: ["Salmon fillets", "Lemon", "Garlic", "Olive oil", "Salt", "Pepper"],
+    description: "Healthy and delicious grilled salmon with a zesty lemon-garlic marinade.",
+    rating: 4.7
+  },
+  {
+    name: "Chicken Curry",
+    ingredients: ["Arborio rice", "Mushrooms", "Chicken broth", "White wine", "Parmesan cheese", "Onion"],
+    description: "Creamy and comforting Italian rice dish infused with earthy mushrooms.",
+    rating: 4.6
+  },
+  {
+    name: "Greek Salad",
+    ingredients: ["Cucumber", "Tomatoes", "Red onion", "Kalamata olives", "Feta cheese", "Olive oil"],
+    description: "Fresh and vibrant salad with crisp cucumbers, juicy tomatoes, and tangy feta cheese.",
+    rating: 4.5
+  },
+  {
+    name: "Rogan Josh",
+    ingredients: ["Ground beef", "Taco seasoning", "Tortillas", "Lettuce", "Tomato", "Cheese"],
+    description: "Classic Mexican street food featuring seasoned beef and your favorite toppings.",
+    rating: 4.4
+  },
+  {
+    name: "Fish Curry",
+    ingredients: ["Chicken breast", "Romaine lettuce", "Caesar dressing", "Croutons", "Parmesan cheese", "Lemon"],
+    description: "Satisfying Fish curry with tender butter, crisp lettuce, and a creamy Caesar dressing.",
+    rating: 4.8
+  },
+
+];
+function redirectToOptView() {
+            window.location.href = "/opt";
+        }
+
+        function searchByName() {
+            var recipeName = document.getElementById("searchInput").value;
+            if (recipeName) {
+                window.location.href = "/recipes/" + recipeName;
+            }
+        }
+
+function createRecipeCard(recipe) {
+    const card = document.createElement('div');
+    card.classList.add('recipe-card');
+
+    // Check if ingredients is an array before joining
+    const ingredients = Array.isArray(recipe.ingredients) ? recipe.ingredients.join(", ") : '';
+
+    card.innerHTML = `
+        <h3>${recipe.name}</h3>
+        <p><strong>Ingredients:</strong> ${ingredients}</p>
+        <p><strong>Description:</strong> ${recipe.description}</p>
+        <p><strong>Rating:</strong> ${recipe.rating}</p>
+    `;
+
+    card.addEventListener('click', () => {
+        // When the card is clicked, show the recipe details
+        alert(`${recipe.name}\n\nIngredients: ${ingredients}\n\nDescription: ${recipe.description}\n\nRating: ${recipe.rating}`);
+    });
+
+    return card;
+}
+
+  // Function to fetch recipes from server endpoint
+  async function fetchRecipes() {
+    try {
+      const response = await fetch('/recipes');
+      if (!response.ok) {
+        throw new Error('Failed to fetch recipes');
+      }
+      const recipes = await response.json();
+      return recipes;
+    } catch (error) {
+      console.error('Error fetching recipes:', error.message);
+      return [];
+    }
+  }
+
+  // Function to initialize the recipe grid
+  async function initializeRecipeGrid() {
+    const recipeGrid = document.getElementById('recipeGrid');
+    const fetchedRecipes = await fetchRecipes();
+    const allRecipes = [...staticRecipes, ...fetchedRecipes]; // Merge static and fetched recipes
+    allRecipes.forEach(recipe => {
+      const card = createRecipeCard(recipe);
+      recipeGrid.appendChild(card);
+    });
+  }
+
+  // Initialize the recipe grid when the page loads
+  window.addEventListener('load', initializeRecipeGrid);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recipe Details</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(to right, #fdf9f9, #373232);
+        }
+        .recipe-details {
+            max-width: 600px;
+            margin: 20px auto;
+            background: linear-gradient(to right, #fdf9f9, #373232);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h2 {
+            margin-top: 0;
+            text-align: center;
+            color: #151414;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+            text-shadow: 2px 2px 10px rgb(255, 255, 255);
+        }
+        .recipe-details h3 {
+            margin-top: 20px;
+            color: #252627;
+            font-family:Georgia, 'Times New Roman', Times, serif;
+        }
+        .recipe-details p {
+            margin-bottom: 10px;
+        }
+        .recipe-details img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin-top: 10px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+    </style>
+</head>
+<body>
+    <h2>Recipe Details</h2>
+    <div class="recipe-details">
+        
+        <div>
+            <h3>Recipe Name:</h3>
+            <p th:text="${recipe.name}"></p>
+        </div>
+        <div>
+            <h3>Ingredients:</h3>
+            <p th:text="${recipe.ingredients}"></p>
+        </div>
+        <div>
+            <h3>Making Description:</h3>
+            <p th:text="${recipe.description}"></p>
+        </div>
+        <div>
+            <h3>Recipe Image:</h3>
+            <img th:src="${recipe.image}" alt="Recipe Image">
+        </div>
+    </div>
+</body>
+</html>
